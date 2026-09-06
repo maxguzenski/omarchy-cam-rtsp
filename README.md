@@ -3,7 +3,7 @@
 A security camera plugin for the Quickshell-based Omarchy shell. View an RTSP
 camera in a bar popup and open a larger live view in MPV.
 
-![Omarchy Cam RTSP popup with camera tabs, a live preview, and camera management controls](docs/camera-preview-english.png)
+![Omarchy Cam RTSP popup with camera tabs, a live preview, and camera management controls](preview.png)
 
 ## Features
 
@@ -52,6 +52,21 @@ installed directory to `~/.config/omarchy/plugins/maxguzenski.cam-rtsp` and repl
 the old ID in your Omarchy bar configuration with `maxguzenski.cam-rtsp`.
 Camera registrations remain in the same location and do not need to be entered again.
 
+## Removal
+
+Close the camera popup, then run:
+
+```bash
+omarchy plugin remove maxguzenski.cam-rtsp
+```
+
+This removes the plugin from Omarchy. Camera registrations remain in
+`${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/security-camera/` so reinstalling
+restores your cameras. If you also want to delete those saved names and URLs,
+delete that directory after removing the plugin.
+
+MPV windows opened by the plugin are independent; close them separately.
+
 ## Local data and privacy
 
 Camera registrations are stored in:
@@ -95,3 +110,7 @@ connect to real cameras or modify your camera registrations.
 Before committing, inspect `git diff --cached` and `git ls-files`. Never force-add
 local camera configuration, credentials, logs, or captures. If reporting a bug,
 replace camera URLs and network details with placeholders.
+
+## License
+
+[MIT License](LICENSE). Copyright (c) 2026 maxguzenski.

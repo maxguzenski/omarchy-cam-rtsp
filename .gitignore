@@ -27,7 +27,7 @@ cameras.json
 *.tmp
 
 # Explicitly approved documentation screenshot.
-!/docs/camera-preview-english.png
+!/preview.png
 
 # Local tooling and Python caches.
 .agents/
