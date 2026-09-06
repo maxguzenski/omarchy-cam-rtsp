@@ -16,7 +16,7 @@ Panel {
   property var cameras: []
   property string activeId: ""
   readonly property var activeCamera: cameras.find(function(camera) { return camera.id === root.activeId }) || null
-  readonly property string cameraName: activeCamera ? activeCamera.name : "Câmeras de segurança"
+  readonly property string cameraName: activeCamera ? activeCamera.name : "Security cameras"
   property bool managing: false
   property bool editing: false
   property string editingId: ""
@@ -111,13 +111,13 @@ Panel {
   function saveCamera() {
     var name = nameField.text.trim()
     if (name === "") {
-      saveError = "Informe um nome para a câmera."
+      saveError = "Enter a name for the camera."
       nameField.forceActiveFocus()
       return
     }
     var url = urlField.text.trim()
     if (!/^rtsps?:\/\/[^\s/]+(?:\/[^\s]*)?$/i.test(url)) {
-      saveError = "Cole a URL completa: rtsp://usuario:senha@ip:554/caminho"
+      saveError = "Paste the full URL: rtsp://username:password@host:554/path"
       return
     }
     var next = cameras.slice()
@@ -149,7 +149,7 @@ Panel {
       try {
         var config = JSON.parse(text())
         var next = Array.isArray(config.cameras) ? config.cameras
-          : (config.url ? [{id: "legacy", name: String(config.name || "Câmera residencial"), url: String(config.url)}] : [])
+          : (config.url ? [{id: "legacy", name: String(config.name || "Home camera"), url: String(config.url)}] : [])
         var previousUrl = root.activeCamera ? root.activeCamera.url : ""
         root.cameras = next
         root.activeId = next.some(function(camera) { return camera.id === config.activeId })
@@ -159,13 +159,13 @@ Panel {
         if (root.wantsPreview && previousUrl !== root.activeCamera.url) root.startPreview()
       } catch (error) {
         root.configLoaded = false
-        root.configError = "Configuração da câmera inválida"
+        root.configError = "Invalid camera configuration"
       }
     }
     onFileChanged: reload()
     onLoadFailed: {
       root.configLoaded = false
-      root.configError = "Não foi possível ler o cadastro de câmeras"
+      root.configError = "Could not read the camera configuration"
     }
   }
 
@@ -176,7 +176,7 @@ Panel {
     stdout: StdioCollector { id: configPathOutput; waitForEnd: true }
     onExited: function(exitCode) {
       if (exitCode !== 0) {
-        root.configError = "Não foi possível carregar o cadastro de câmeras"
+        root.configError = "Could not load the camera configuration"
         return
       }
       configFile.path = configPathOutput.text.trim()
@@ -194,7 +194,7 @@ Panel {
     }
     onExited: function(exitCode) {
       if (exitCode !== 0) {
-        root.saveError = "Não foi possível salvar. Confira a URL RTSP e tente novamente."
+        root.saveError = "Could not save. Check the RTSP URL and try again."
         return
       }
       root.editing = false
@@ -215,7 +215,7 @@ Panel {
       }
       if (!root.wantsPreview) return
       if (exitCode !== 0) {
-        root.configError = "Não foi possível iniciar a prévia"
+        root.configError = "Could not start the preview"
         return
       }
       root.configError = ""
@@ -233,7 +233,7 @@ Panel {
       Qt.callLater(root.updatePreview)
       if (generation !== root.previewGeneration || !root.wantsPreview) return
       if (exitCode !== 0) {
-        root.configError = "Aguardando imagem da câmera…"
+        root.configError = "Waiting for a camera image…"
         return
       }
       var frameGeneration = generation
@@ -253,7 +253,7 @@ Panel {
     command: [root.controlPath, "open"]
     onExited: function(exitCode) {
       if (exitCode === 0) root.close()
-      else root.configError = "Não foi possível abrir o MPV"
+      else root.configError = "Could not open MPV"
     }
   }
 
@@ -300,7 +300,7 @@ Panel {
           anchors.right: root.managing ? manageButton.left : openButton.left
           anchors.rightMargin: Style.spacing.sm
           anchors.verticalCenter: parent.verticalCenter
-          text: root.managing ? (root.editing ? (root.editingId ? "Editar câmera" : "Adicionar câmera") : "Gerenciar câmeras") : root.cameraName
+          text: root.managing ? (root.editing ? (root.editingId ? "Edit camera" : "Add camera") : "Manage cameras") : root.cameraName
           textFormat: Text.PlainText
           color: Color.popups.text
           font.family: Style.font.menuFamily
@@ -316,7 +316,7 @@ Panel {
           anchors.verticalCenter: parent.verticalCenter
           iconText: "\uf065"
           visible: !root.managing && root.activeCamera !== null
-          tooltipText: "Abrir grande no MPV"
+          tooltipText: "Open larger view in MPV"
           onClicked: root.openPlayer()
         }
 
@@ -325,7 +325,7 @@ Panel {
           anchors.right: parent.right
           anchors.verticalCenter: parent.verticalCenter
           iconText: root.managing ? "\uf060" : "\uf067"
-          tooltipText: root.managing ? "Voltar" : "Adicionar e gerenciar câmeras"
+          tooltipText: root.managing ? "Back" : "Add and manage cameras"
           enabled: !saveProcess.running
           onClicked: {
             if (root.editing) { root.editing = false; urlField.text = "" }
@@ -366,7 +366,7 @@ Panel {
 
         Text {
           visible: root.editing
-          text: "Nome da câmera"
+          text: "Camera name"
           color: Color.popups.text
           font.family: Style.font.menuFamily
           font.pixelSize: Style.font.body
@@ -377,7 +377,7 @@ Panel {
           width: parent.width
           visible: root.editing
           enabled: !saveProcess.running
-          placeholderText: "Ex.: Garagem, Portão, Quintal"
+          placeholderText: "e.g. Garage, Gate, Backyard"
           selectByMouse: true
           onAccepted: urlField.forceActiveFocus()
         }
@@ -385,7 +385,7 @@ Panel {
         Text {
           width: parent.width
           visible: root.editing
-          text: "Cole a URL RTSP completa, incluindo usuário e senha."
+          text: "Paste the full RTSP URL, including username and password."
           color: Color.popups.text
           font.family: Style.font.menuFamily
           font.pixelSize: Style.font.body
@@ -397,7 +397,7 @@ Panel {
           width: parent.width
           visible: root.editing
           enabled: !saveProcess.running
-          placeholderText: "rtsp://usuario:senha@ip:554/caminho"
+          placeholderText: "rtsp://username:password@host:554/path"
           selectByMouse: true
           onAccepted: root.saveCamera()
         }
@@ -406,13 +406,13 @@ Panel {
           visible: root.editing
           spacing: Style.spacing.sm
           Button {
-            text: saveProcess.running ? "Salvando…" : "Salvar"
+            text: saveProcess.running ? "Saving…" : "Save"
             bordered: true
             enabled: !saveProcess.running && nameField.text.trim() !== "" && urlField.text.trim() !== "" && root.configLoaded
             onClicked: root.saveCamera()
           }
           Button {
-            text: "Cancelar"
+            text: "Cancel"
             enabled: !saveProcess.running
             onClicked: { root.editing = false; urlField.text = ""; root.saveError = "" }
           }
@@ -431,14 +431,14 @@ Panel {
         Button {
           visible: !root.editing
           iconText: "\uf067"
-          text: "Adicionar câmera"
+          text: "Add camera"
           enabled: !saveProcess.running && root.configLoaded
           onClicked: root.editCamera(null)
         }
 
         Text {
           visible: !root.editing && root.cameras.length === 0
-          text: "Nenhuma câmera cadastrada."
+          text: "No cameras added."
           color: Color.popups.text
           font.family: Style.font.menuFamily
           font.pixelSize: Style.font.body
@@ -461,7 +461,7 @@ Panel {
               anchors.right: rowActions.left
               anchors.rightMargin: Style.spacing.sm
               anchors.verticalCenter: parent.verticalCenter
-              text: root.removingId === cameraRow.modelData.id ? "Remover " + cameraRow.modelData.name + "?" : cameraRow.modelData.name
+              text: root.removingId === cameraRow.modelData.id ? "Remove " + cameraRow.modelData.name + "?" : cameraRow.modelData.name
               textFormat: Text.PlainText
               elide: Text.ElideRight
               color: Color.popups.text
@@ -475,7 +475,7 @@ Panel {
               enabled: !saveProcess.running
               Button {
                 iconText: root.removingId === cameraRow.modelData.id ? "\uf060" : "\uf044"
-                tooltipText: root.removingId === cameraRow.modelData.id ? "Cancelar" : "Editar nome e URL RTSP"
+                tooltipText: root.removingId === cameraRow.modelData.id ? "Cancel" : "Edit name and RTSP URL"
                 onClicked: {
                   if (root.removingId === cameraRow.modelData.id) root.removingId = ""
                   else root.editCamera(cameraRow.modelData)
@@ -483,8 +483,8 @@ Panel {
               }
               Button {
                 iconText: "\uf1f8"
-                text: root.removingId === cameraRow.modelData.id ? "Remover" : ""
-                tooltipText: "Remover câmera"
+                text: root.removingId === cameraRow.modelData.id ? "Remove" : ""
+                tooltipText: "Remove camera"
                 foreground: root.removingId === cameraRow.modelData.id ? Color.urgent : Color.popups.text
                 onClicked: {
                   if (root.removingId === cameraRow.modelData.id) root.removeCamera(cameraRow.modelData.id)
@@ -553,7 +553,7 @@ Panel {
           Text {
             anchors.horizontalCenter: parent.horizontalCenter
             width: viewport.width - Style.spacing.lg * 2
-            text: root.configError !== "" ? root.configError : (root.activeCamera ? "Conectando…" : "Nenhuma câmera cadastrada.\nClique em + para adicionar.")
+            text: root.configError !== "" ? root.configError : (root.activeCamera ? "Connecting…" : "No cameras added.\nClick + to add one.")
             textFormat: Text.PlainText
             color: root.configError !== "" ? Color.urgent : Color.foreground
             font.family: Style.font.menuFamily
@@ -583,7 +583,7 @@ Panel {
           Text {
             id: openHint
             anchors.centerIn: parent
-            text: "\uf065  Abrir grande"
+            text: "\uf065  Open larger view"
             color: "white"
             font.family: root.bar ? root.bar.fontFamily : Style.font.menuFamily
             font.pixelSize: Style.font.caption

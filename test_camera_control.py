@@ -38,7 +38,7 @@ class CameraControlTest(unittest.TestCase):
         return self.run_control("save", data={"cameras": cameras, "activeId": active})
 
     def camera(self, camera_id="one", url="rtsp://user:p%40ss@192.0.2.1:554/live"):
-        return {"id": camera_id, "name": "Câmera " + camera_id, "url": url}
+        return {"id": camera_id, "name": "Camera " + camera_id, "url": url}
 
     def test_add_edit_select_and_remove_last_camera(self):
         first, second = self.camera(), self.camera("two", "rtsps://192.0.2.2/live")
@@ -76,7 +76,7 @@ class CameraControlTest(unittest.TestCase):
         self.assertEqual(self.run_control("init").returncode, 0)
         self.assertEqual(json.loads(self.config.read_text()), data)
         second = self.camera("two")
-        second["name"] = "Garagem"
+        second["name"] = "Garage"
         self.assertEqual(self.save([self.camera(), second], "two").returncode, 0)
         self.assertEqual(self.run_control("init").returncode, 0)
         self.assertEqual(json.loads(self.config.read_text())["activeId"], "two")

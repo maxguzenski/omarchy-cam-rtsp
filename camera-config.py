@@ -21,7 +21,7 @@ def initialize(path):
     legacy = Path(__file__).resolve().with_name("camera.json")
     data = json.loads(legacy.read_text()) if legacy.exists() else {"cameras": [], "activeId": ""}
     if "cameras" not in data:
-        cameras = [{"id": "legacy", "name": data.get("name") or "Câmera residencial", "url": data["url"]}] if data.get("url") else []
+        cameras = [{"id": "legacy", "name": data.get("name") or "Home camera", "url": data["url"]}] if data.get("url") else []
         data = {"cameras": cameras, "activeId": "legacy" if cameras else ""}
     save_config(path, data)
 
@@ -29,27 +29,27 @@ def initialize(path):
 def save_config(path, data):
     cameras = data.get("cameras")
     if not isinstance(cameras, list):
-        raise ValueError("Lista de câmeras inválida")
+        raise ValueError("Invalid camera list")
     ids = set()
     for camera in cameras:
         camera_id = camera.get("id")
         if not isinstance(camera_id, str) or not camera_id or camera_id in ids:
-            raise ValueError("Identificador de câmera inválido")
+            raise ValueError("Invalid camera ID")
         ids.add(camera_id)
         url = camera.get("url", "")
         if not isinstance(url, str) or any(c.isspace() for c in url):
-            raise ValueError("A URL RTSP não pode conter espaços")
+            raise ValueError("The RTSP URL cannot contain whitespace")
         try:
             parsed = urlsplit(url)
             valid = parsed.scheme in ("rtsp", "rtsps") and parsed.hostname and parsed.port != 0
         except ValueError:
             valid = False
         if not valid:
-            raise ValueError("Informe uma URL RTSP completa e válida")
+            raise ValueError("Enter a complete, valid RTSP URL")
         if not isinstance(camera.get("name"), str) or not camera["name"].strip():
-            raise ValueError("Nome de câmera inválido")
+            raise ValueError("Invalid camera name")
     if data.get("activeId") not in (ids if ids else {""}):
-        raise ValueError("Selecione uma câmera válida")
+        raise ValueError("Select a valid camera")
 
     fd, temporary = tempfile.mkstemp(prefix=".camera-", suffix=".json", dir=path.parent)
     try:
@@ -77,5 +77,5 @@ if __name__ == "__main__":
                 save_config(path, json.loads(sys.stdin.readline()))
     except (ValueError, TypeError, AttributeError, OSError):
         # Never echo a URL: it may contain the camera password.
-        print("Não foi possível gravar as câmeras. Confira os dados e a permissão da pasta de configuração.", file=sys.stderr)
+        print("Could not save cameras. Check the data and configuration folder permissions.", file=sys.stderr)
         sys.exit(1)

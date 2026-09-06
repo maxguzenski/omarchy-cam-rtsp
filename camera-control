@@ -23,7 +23,7 @@ load_camera() {
   local camera
   camera=$(jq -ce 'if has("cameras") then .activeId as $id | .cameras[] | select(.id == $id) else . end' "$config")
   url=$(jq -er '.url | select(type == "string" and length > 0)' <<<"$camera")
-  camera_name=$(jq -r '.name // "Câmera"' <<<"$camera")
+  camera_name=$(jq -r '.name // "Camera"' <<<"$camera")
 }
 
 running() {
@@ -83,5 +83,5 @@ case "${1:-}" in
   open) open_player ;;
   snapshot) snapshot "${2:-}" ;;
   frame) printf '%s\n' "$frame_file" ;;
-  *) echo "uso: $0 {start|stop|open|snapshot <a|b>|frame|save|init}" >&2; exit 2 ;;
+  *) echo "usage: $0 {start|stop|open|snapshot <a|b>|frame|save|init}" >&2; exit 2 ;;
 esac

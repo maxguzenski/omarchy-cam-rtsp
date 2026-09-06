@@ -52,7 +52,7 @@ BarWidget {
     bar: root.bar
     text: "\uf03d"
     active: root.opened
-    tooltipText: "Câmeras de segurança"
+    tooltipText: "Security cameras"
     onPressed: function(mouseButton) {
       if (mouseButton === Qt.LeftButton) root.togglePanel()
     }

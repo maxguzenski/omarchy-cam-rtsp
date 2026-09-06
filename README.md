@@ -13,7 +13,7 @@ camera in a bar popup and open a larger live view in MPV.
 - Open the selected camera in MPV from the expand button or by clicking its image.
 - Close the popup by clicking outside, pressing Escape, or clicking the bar icon.
 
-The interface is currently in Brazilian Portuguese. The popup uses periodically
+The interface is in English. The popup uses periodically
 refreshed images; MPV provides the full video view. Audio is disabled.
 
 ## Requirements
@@ -31,7 +31,7 @@ omarchy plugin add https://github.com/maxguzenski/omarchy-cam-rtsp --enable
 ```
 
 The plugin ID is `maxguzenski.cam-rtsp`. Click its camera icon in the bar, then
-**+ → Adicionar câmera**. Enter a name and the URL supplied by your camera, such as:
+**+ → Add camera**. Enter a name and the URL supplied by your camera, such as:
 
 ```text
 rtsp://USERNAME:PASSWORD@CAMERA_HOST:554/STREAM_PATH
