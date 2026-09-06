@@ -296,7 +296,7 @@ Panel {
 
         Text {
           anchors.left: parent.left
-          anchors.right: root.managing ? manageButton.left : openButton.left
+          anchors.right: manageButton.left
           anchors.rightMargin: Style.spacing.sm
           anchors.verticalCenter: parent.verticalCenter
           text: root.managing ? (root.editing ? (root.editingId ? "Edit camera" : "Add camera") : "Manage cameras") : "Security Cameras"
@@ -306,17 +306,6 @@ Panel {
           font.pixelSize: Style.font.title
           font.bold: true
           elide: Text.ElideRight
-        }
-
-        Button {
-          id: openButton
-          anchors.right: manageButton.left
-          anchors.rightMargin: Style.spacing.xs
-          anchors.verticalCenter: parent.verticalCenter
-          iconText: "\uf065"
-          visible: !root.managing && root.activeCamera !== null
-          tooltipText: "Open larger view in MPV"
-          onClicked: root.openPlayer()
         }
 
         Button {

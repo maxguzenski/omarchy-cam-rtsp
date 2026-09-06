@@ -10,7 +10,7 @@ camera in a bar popup and open a larger live view in MPV.
 - Add, edit, and remove cameras from the **+** button.
 - Give each camera a name and paste its complete RTSP URL into one field.
 - Switch between registered cameras in the popup.
-- Open the selected camera in MPV from the expand button or by clicking its image.
+- Open the selected camera in MPV by clicking its image.
 - Close the popup by clicking outside, pressing Escape, or clicking the bar icon.
 
 The interface is in English. The popup uses periodically
