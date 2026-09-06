@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "maxguzenski.cam-rtsp",
-  "name": "Omarchy Cam RTSP",
+  "name": "Camera RTSP",
   "version": "0.3.0",
   "author": "maxguzenski",
   "description": "Named RTSP cameras with popup previews, camera management, and MPV playback.",
@@ -12,7 +12,7 @@
     "barWidget": "BarWidget.qml"
   },
   "barWidget": {
-    "displayName": "Security Camera",
+    "displayName": "Camera RTSP",
     "description": "Open the live camera preview",
     "category": "System",
     "allowMultiple": false,

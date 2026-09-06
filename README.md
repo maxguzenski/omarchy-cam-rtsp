@@ -1,9 +1,9 @@
-# Omarchy Cam RTSP
+# Camera RTSP
 
 A security camera plugin for the Quickshell-based Omarchy shell. View an RTSP
 camera in a bar popup and open a larger live view in MPV.
 
-![Omarchy Cam RTSP popup with camera tabs, a live preview, and camera management controls](preview.png)
+![Camera RTSP popup with camera tabs, a live preview, and camera management controls](preview.png)
 
 ## Features
 
