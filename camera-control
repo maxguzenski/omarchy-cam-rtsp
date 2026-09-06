@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+
+plugin_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+config="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/security-camera/cameras.json"
+if [[ "${1:-}" == "save" || "${1:-}" == "init" ]]; then
+  exec python3 "$plugin_dir/camera-config.py" "$1"
+fi
+runtime_dir="${XDG_RUNTIME_DIR:-/tmp}/omarchy-security-camera"
+pid_file="$runtime_dir/preview.pid"
+frame_file="$runtime_dir/preview.jpg"
+log_file="$runtime_dir/preview.log"
+
+mkdir -p "$runtime_dir"
+exec 9>"$runtime_dir/control.lock"
+flock 9
+
+load_camera() {
+  if [[ ! -f "$config" ]]; then
+    python3 "$plugin_dir/camera-config.py" init >/dev/null
+  fi
+  local camera
+  camera=$(jq -ce 'if has("cameras") then .activeId as $id | .cameras[] | select(.id == $id) else . end' "$config")
+  url=$(jq -er '.url | select(type == "string" and length > 0)' <<<"$camera")
+  camera_name=$(jq -r '.name // "Câmera"' <<<"$camera")
+}
+
+running() {
+  [[ -s "$pid_file" ]] || return 1
+  local pid
+  pid=$(<"$pid_file")
+  kill -0 "$pid" 2>/dev/null
+}
+
+stop_preview() {
+  if running; then
+    kill "$(<"$pid_file")" 2>/dev/null || true
+    for _ in {1..10}; do
+      running || break
+      sleep 0.05
+    done
+    running && kill -KILL "$(<"$pid_file")" 2>/dev/null || true
+  fi
+  rm -f "$pid_file"
+}
+
+start_preview() {
+  stop_preview
+  load_camera
+  rm -f "$frame_file"
+
+  nohup ffmpeg -nostdin -hide_banner -loglevel warning \
+    -rtsp_transport tcp -timeout 15000000 \
+    -fflags +genpts -use_wallclock_as_timestamps 1 \
+    -i "$url" -avoid_negative_ts make_zero \
+    -map 0:v:0 -an -vf 'fps=2,scale=640:-2' \
+    -q:v 4 -update 1 -atomic_writing 1 -y "$frame_file" \
+    >"$log_file" 2>&1 9>&- &
+  echo "$!" >"$pid_file"
+}
+
+open_player() {
+  load_camera
+  setsid -f mpv \
+    --no-terminal --no-audio --profile=low-latency \
+    --demuxer-lavf-o=rtsp_transport=tcp,timeout=15000000 \
+    --title="$camera_name" --geometry=1280x720 \
+    "$url" 9>&-
+}
+
+snapshot() {
+  local slot="${1:-}"
+  [[ "$slot" == "a" || "$slot" == "b" ]] || return 2
+  [[ -s "$frame_file" ]] || return 1
+  cp -- "$frame_file" "$runtime_dir/display-$slot.jpg.tmp"
+  mv -f -- "$runtime_dir/display-$slot.jpg.tmp" "$runtime_dir/display-$slot.jpg"
+}
+
+case "${1:-}" in
+  start) start_preview ;;
+  stop) stop_preview ;;
+  open) open_player ;;
+  snapshot) snapshot "${2:-}" ;;
+  frame) printf '%s\n' "$frame_file" ;;
+  *) echo "uso: $0 {start|stop|open|snapshot <a|b>|frame|save|init}" >&2; exit 2 ;;
+esac

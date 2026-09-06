@@ -1,0 +1,36 @@
+# Camera registrations and migration backups are private machine data.
+camera.json
+cameras.json
+.camera-*
+*.json.bak*
+*.bak
+*.backup
+
+# Credentials and local environment files.
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Camera frames, recordings, and runtime files.
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.mp4
+*.mkv
+*.log
+*.pid
+*.lock
+*.tmp
+
+# Local tooling and Python caches.
+.agents/
+.codex/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
