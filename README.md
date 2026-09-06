@@ -3,6 +3,8 @@
 A security camera plugin for the Quickshell-based Omarchy shell. View an RTSP
 camera in a bar popup and open a larger live view in MPV.
 
+![Omarchy Cam RTSP popup with camera tabs, a live preview, and camera management controls](docs/screenshot.png)
+
 ## Features
 
 - Add, edit, and remove cameras from the **+** button.
@@ -68,8 +70,9 @@ show private areas and diagnostic output may include camera connection details.
 Stream URLs are passed to FFmpeg and MPV as process arguments, so processes with
 permission to inspect those arguments can see them.
 
-No camera registrations, real credentials, network addresses, or screenshots are
-included in this repository. Addresses and credentials in the automated tests
+No camera registrations, real credentials, or network addresses are included in
+this repository. The screenshot above is included with the owner's permission.
+Addresses and credentials in the automated tests
 are synthetic fixtures; test IPs use the documentation-only `192.0.2.0/24` range.
 
 ## Development

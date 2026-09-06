@@ -26,6 +26,9 @@ cameras.json
 *.lock
 *.tmp
 
+# Explicitly approved documentation screenshot.
+!/docs/screenshot.png
+
 # Local tooling and Python caches.
 .agents/
 .codex/
