@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "max.security-camera",
+  "id": "maxguzenski.cam-rtsp",
   "name": "Omarchy Cam RTSP",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "maxguzenski",
   "description": "Named RTSP cameras with popup previews, camera management, and MPV playback.",
   "kinds": [

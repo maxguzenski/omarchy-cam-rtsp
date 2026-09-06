@@ -30,7 +30,7 @@ This plugin is for the Quickshell-based shell, not the older Waybar setup.
 omarchy plugin add https://github.com/maxguzenski/omarchy-cam-rtsp --enable
 ```
 
-The plugin ID is `max.security-camera`. Click its camera icon in the bar, then
+The plugin ID is `maxguzenski.cam-rtsp`. Click its camera icon in the bar, then
 **+ → Adicionar câmera**. Enter a name and the URL supplied by your camera, such as:
 
 ```text
@@ -44,8 +44,13 @@ credentials where necessary.
 To update:
 
 ```bash
-omarchy plugin update max.security-camera
+omarchy plugin update maxguzenski.cam-rtsp
 ```
+
+When upgrading an installation that used the previous plugin ID, rename its
+installed directory to `~/.config/omarchy/plugins/maxguzenski.cam-rtsp` and replace
+the old ID in your Omarchy bar configuration with `maxguzenski.cam-rtsp`.
+Camera registrations remain in the same location and do not need to be entered again.
 
 ## Local data and privacy
 

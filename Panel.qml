@@ -6,8 +6,8 @@ import qs.Ui
 
 Panel {
   id: root
-  moduleName: "max.security-camera"
-  ipcTarget: "max.security-camera"
+  moduleName: "maxguzenski.cam-rtsp"
+  ipcTarget: "maxguzenski.cam-rtsp"
   manageIpc: false
 
   property var anchorItem: null

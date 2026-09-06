@@ -5,7 +5,7 @@ import qs.Ui
 
 BarWidget {
   id: root
-  moduleName: "max.security-camera"
+  moduleName: "maxguzenski.cam-rtsp"
 
   readonly property bool opened: panelLoader.item ? panelLoader.item.opened === true : false
 
