@@ -16,7 +16,6 @@ Panel {
   property var cameras: []
   property string activeId: ""
   readonly property var activeCamera: cameras.find(function(camera) { return camera.id === root.activeId }) || null
-  readonly property string cameraName: activeCamera ? activeCamera.name : "Security cameras"
   property bool managing: false
   property bool editing: false
   property string editingId: ""
@@ -300,11 +299,11 @@ Panel {
           anchors.right: root.managing ? manageButton.left : openButton.left
           anchors.rightMargin: Style.spacing.sm
           anchors.verticalCenter: parent.verticalCenter
-          text: root.managing ? (root.editing ? (root.editingId ? "Edit camera" : "Add camera") : "Manage cameras") : root.cameraName
+          text: root.managing ? (root.editing ? (root.editingId ? "Edit camera" : "Add camera") : "Manage cameras") : "Security Cameras"
           textFormat: Text.PlainText
           color: Color.popups.text
           font.family: Style.font.menuFamily
-          font.pixelSize: Style.font.body
+          font.pixelSize: Style.font.title
           font.bold: true
           elide: Text.ElideRight
         }
@@ -341,7 +340,7 @@ Panel {
         anchors.right: parent.right
         anchors.top: header.bottom
         height: visible ? Style.space(34) : 0
-        visible: !root.managing && root.cameras.length > 1
+        visible: !root.managing && root.cameras.length > 0
         orientation: ListView.Horizontal
         spacing: Style.spacing.xs
         clip: true
